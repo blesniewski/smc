@@ -4,6 +4,8 @@ class DatasetMerger:
     def merge_two_datasets(self, path_ds1, path_ds2, out_path):
         ds1 = np.load(path_ds1)
         ds2 = np.load(path_ds2)
+        print("DS 1 shape: {}".format(ds1.shape))
+        print("DS 2 shape: {}".format(ds2.shape))
         bigger = 0
 
         # we need to cut off excess of material to merge them nicely
@@ -22,7 +24,7 @@ class DatasetMerger:
         dso[:,::2] = ds1
         dso[:,1::2] = ds2
         print(dso.shape)
-        # now we can append the material that was cut off (no wasting :))
+        # now we can append the material that was cut off (no wasting ;))
         if bigger == 1:
             ds1 = np.load(path_ds1)
             dso = np.concatenate((dso,ds1[:,ds2.shape[1]+1:]), axis = 1)
