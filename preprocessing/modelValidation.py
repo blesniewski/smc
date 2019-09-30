@@ -11,6 +11,9 @@ class ModelValidator:
         features = featureExtractor.extract_features(wav_filepath)
         print(features.shape)
         features = features.transpose()
+        row_list = [8,4,4,27,33,12,16,13,3,31]
+        features = features[:,row_list]
+        #features = features[:,7:21]
         print(features.shape)
         json_file = open(model_filepath,'r')
         loaded_model_json = json_file.read()
@@ -18,12 +21,13 @@ class ModelValidator:
 
         loaded_model = model_from_json(loaded_model_json)
         loaded_model.load_weights(weights_filepath)
-        loaded_model.compile(loss='binary_crossentropy', optimizer='adam',
-                     metrics=['accuracy'])
+        loaded_model.compile(loss='categorical_crossentropy', optimizer='adam',
+                     metrics=['categorical_accuracy'])
 
         output = loaded_model.predict(features)
         print(output.shape)
 
+        print(output)
 
 
         x_domain = list(range(len(x)))
