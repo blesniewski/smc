@@ -11,9 +11,9 @@ class ModelValidator:
         features = featureExtractor.extract_features(wav_filepath)
         print(features.shape)
         features = features.transpose()
-        row_list = [8,4,4,27,33,12,16,13,3,31]
-        features = features[:,row_list]
-        #features = features[:,7:21]
+        # row_list = [8,4,4,27,33,12,16,13,3,31]
+        # features = features[:,row_list]
+        features = features[:,7:21]
         print(features.shape)
         json_file = open(model_filepath,'r')
         loaded_model_json = json_file.read()

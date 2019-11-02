@@ -78,7 +78,7 @@ class VoiceActivationDetector:
         else:
             ltma = results_wrapped[0][0]
             stma = results_wrapped[1][0]
-
+        pool.terminate()
         # boosting the ltma a bit, for clearance
         ltma = ltma + 0.015
 
@@ -101,6 +101,7 @@ class VoiceActivationDetector:
         for r in results_wrapped:
             if len(r) > 0:
                 results_unwrapped.append(r[0])
+        pool.terminate()
         results_unwrapped.sort(key=itemgetter(1))
         vad_ranges = self.merge_frame_ranges(results_unwrapped, fs)
 

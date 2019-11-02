@@ -8,7 +8,6 @@ import numpy as np
 class FeatureExtractor:
     def __short_term_feature_extraction_from_file(self, fs, x):
         win = int(0.125 * fs)
-        print(str(win) + " vs " + str(len(x)))
         [st_feats, st_feat_names] = afe.stFeatureExtraction(x, fs, win, win)
         return st_feats
 
@@ -47,7 +46,6 @@ class FeatureExtractor:
         #                       label_array[0][:], 'r')
         # plt.legend()
         # plt.show()
-
         return np.concatenate((features, label_array), axis=0)
 
 if __name__ == '__main__':
