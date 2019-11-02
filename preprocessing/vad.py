@@ -53,7 +53,7 @@ class VoiceActivationDetector:
                     merged.append(curr_tuple)
         return merged
 
-    def perform_vad(self, wav_file):
+    def perform_vad(self, wav_file, debug = False):
         # fs is the rate, and x.shape[0] would be number of samples we have
         [fs, x] = abi.readAudioFile(wav_file)
         # signal normalization
@@ -78,7 +78,7 @@ class VoiceActivationDetector:
         else:
             ltma = results_wrapped[0][0]
             stma = results_wrapped[1][0]
-
+        pool.terminate()
         # boosting the ltma a bit, for clearance
         ltma = ltma + 0.015
 
@@ -101,20 +101,22 @@ class VoiceActivationDetector:
         for r in results_wrapped:
             if len(r) > 0:
                 results_unwrapped.append(r[0])
+        pool.terminate()
         results_unwrapped.sort(key=itemgetter(1))
         vad_ranges = self.merge_frame_ranges(results_unwrapped, fs)
 
-        # for demo purposes
-        # x_dziedzina = list(range(x.shape[0]))
-        # shrt_line = plt.plot(x_dziedzina[len(x_dziedzina) - len(stma) :],
-        #                      stma, label='STMA')
-        # long_ling = plt.plot(x_dziedzina[len(x_dziedzina) - len(ltma) :],
-        #                      ltma, label='LTMA')
-        # for t in vad_ranges:
-        #     plt.plot([t[0],t[1]], [0.02,0.02],'g-')
+        #for demo purposes
+        if debug == True:
+            x_domain = list(range(x.shape[0]))
+            shrt_line = plt.plot(x_domain[len(x_domain) - len(stma) :],
+                                 stma, label='STMA')
+            long_ling = plt.plot(x_domain[len(x_domain) - len(ltma) :],
+                                 ltma, label='LTMA')
+            for t in vad_ranges:
+                plt.plot([t[0],t[1]], [0.02,0.02],'g-')
 
-        # plt.legend()
-        # plt.show()
+            plt.legend()
+            plt.show()
         return vad_ranges
 
 
@@ -123,4 +125,7 @@ class VoiceActivationDetector:
 
 if __name__ == '__main__':
     detector = VoiceActivationDetector()
-    detector.perform_vad(sys.argv[1])
+    if len(sys.argv) > 2 and sys.argv[2] == 'debug':
+        detector.perform_vad(sys.argv[1], debug=True)
+    else:
+        detector.perform_vad(sys.argv[1])

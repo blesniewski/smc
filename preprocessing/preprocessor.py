@@ -7,8 +7,9 @@ from progress.bar import Bar
 class Preprocessor:
 
     # sample type:
-    # 0 - whisper
-    # 1 - normal
+    # 0 - silence - assigned by VAD only
+    # 1 - whisper
+    # 2 - normal speech
     def __get_all_files_in_dir(self, dirpath):
         files = []
         dircontents = listdir(dirpath)
